@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PaterFitness",
-    "slug": "PaterFitness",
+    "slug": "paterfitness",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,10 +18,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jesuan.paterfitness"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e9f73646-c08e-43b3-af83-2f3deda2a79a"
+      }
+    },
+    "owner": "jesuan"
   }
 }
