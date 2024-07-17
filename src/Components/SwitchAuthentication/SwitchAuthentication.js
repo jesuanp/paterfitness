@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react'
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 
 // Components
 import SingUp from '../SingUp/SingUp';
@@ -13,10 +13,12 @@ const Stack = createNativeStackNavigator()
 
 function Logo () {
     return (
-      <Image
-        style={{width: 170, height: 35}}
-        source={require('../../images/Logo.png')}
-      />
+      <View style={{width: '100%', alignItems: 'center', paddingRight: 40}}>
+        <Image
+          style={{width: 170, height: 35,}}
+          source={require('../../images/Logo.png')}
+        />
+      </View>
     )
 }
 
@@ -37,7 +39,7 @@ export default function SwitchAuthentication() {
               backgroundColor: '#141414',
             },
             headerShadowVisible: true,
-            headerLeft: () => <Logo />
+            headerLeft: () => <Logo />,
           }}
         >
 

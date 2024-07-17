@@ -27,7 +27,7 @@ export default function LandingPage({navigation: {navigate}}) {
                     width={300}
                     height={'100%'}
                     autoPlay={true}
-                    mode="parallax"
+                    mode="normal-horizontal"
                     data={[image1, image2, image3]}
                     scrollAnimationDuration={2000}
                     onSnapToItem={(index) => setIndexImage(index)}
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         gap: 5,
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 5
     }
 })
