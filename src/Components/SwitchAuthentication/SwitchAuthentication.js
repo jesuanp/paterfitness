@@ -1,34 +1,47 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react'
-import { Image, View } from 'react-native';
 
-// Components
+// Components Of Login
 import SingUp from '../SingUp/SingUp';
 import SignIn from '../SignIn/SignIn';
 import OtherInfo1 from '../SingUp/OtherInfo/OtherInfo1';
 import OtherInfo2 from '../SingUp/OtherInfo/OtherInfo2';
 import LandingPage from '../LandingPage/LandingPage';
 
-const Stack = createNativeStackNavigator()
+// Components
+import Logo from './Logo';
+import Home from '../Home/Home';
 
-function Logo () {
-    return (
-      <View style={{width: '100%', alignItems: 'center', paddingRight: 40}}>
-        <Image
-          style={{width: 170, height: 35,}}
-          source={require('../../images/Logo.png')}
-        />
-      </View>
-    )
-}
+const Stack = createNativeStackNavigator()
 
 export default function SwitchAuthentication() {
 
-    // const [login, setLogin] = useState(false)
+    const [login, setLogin] = useState(false)
 
-    // if(login) {
-    //     return;
-    // }
+    if(login) {
+        return (
+          <Stack.Navigator
+            screenOptions={{
+              headerTitle: '',
+              headerTintColor: '#fff',
+              headerStyle: {
+                backgroundColor: '#141414',
+              },
+              headerShadowVisible: true,
+              headerLeft: () => <Logo />,
+            }}
+          >
+
+            <Stack.Screen
+                name='Home'
+                children={() => (
+                  <Home setLogin={setLogin} />
+                )}
+            />
+
+          </Stack.Navigator>
+        )
+    }
 
     return (
         <Stack.Navigator
@@ -51,11 +64,14 @@ export default function SwitchAuthentication() {
             <Stack.Screen
                 name='Singup'
                 component={SingUp}
+                
             />
 
             <Stack.Screen
                 name='Signin'
-                component={SignIn}
+                children={() => (
+                  <SignIn setLogin={setLogin} />
+                )}
             />
 
             <Stack.Screen

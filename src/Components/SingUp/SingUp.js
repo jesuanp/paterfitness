@@ -1,22 +1,66 @@
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
+
+// Auth with Firebase
+import { appFirebase, auth } from '../../config/firebase'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 
 export default function SingUp({navigation}) {
 
     const [stateInputs, setStateInputs] = useState({
-        name: '',
-        userName: '',
+        email: '',
         password: '',
         confirmPassword: ''
     })
 
-    const { name, userName, password, confirmPassword } = stateInputs
+    const { email, password, confirmPassword } = stateInputs
 
     const onChangeInputs = (e, inputName) => {
+        let text = e
+        if(inputName == 'email') {
+          text = e.toLowerCase()
+        }
         setStateInputs({
-            ...stateInputs,
-            [inputName]: e
+          ...stateInputs,
+          [inputName]: text
         })
+      }
+
+    const onSubmit = async() => {
+
+        var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+    
+        if(email.trim() == '') {
+          return Alert.alert('Falta el correo')
+        }
+        if(!validEmail.test(email)) {
+          return Alert.alert('Hay parametros mal escrito en el correo')
+        }
+        if(password.trim() == '') {
+          return Alert.alert('Falta la contraseña')
+        }
+        if(confirmPassword.trim() == '') {
+          return Alert.alert('Falta confirmar la contraseña')
+        }
+        if(password.trim() !== confirmPassword.trim()){
+          return Alert.alert('Las contraseñas son distintas')
+        }
+    
+        try {
+    
+            await createUserWithEmailAndPassword(auth, email, password)
+
+            await sendEmailVerification(auth.currentUser)
+        
+            Alert.alert('Usuario creado, confirma el correo electronico e inicia sesión')
+
+            auth.signOut()
+
+            navigation.navigate('Signin')
+          
+        } catch (error) {
+          console.log(error)
+        }
     }
 
     return (
@@ -27,17 +71,9 @@ export default function SingUp({navigation}) {
                     <View>
                         <TextInput
                             style={styles.input}
-                            onChangeText={(e) => onChangeInputs(e, 'name')}
-                            value={name}
-                            placeholder="Nombre"
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(e) => onChangeInputs(e, 'userName')}
-                            value={userName}
-                            placeholder="Nombre de usuario"
+                            onChangeText={(e) => onChangeInputs(e, 'email')}
+                            value={email}
+                            placeholder="ejemplo@gmail.com"
                         />
                     </View>
                     <View>
@@ -46,6 +82,7 @@ export default function SingUp({navigation}) {
                             onChangeText={(e) => onChangeInputs(e, 'password')}
                             value={password}
                             placeholder="Contraseña"
+                            secureTextEntry={true}
                         />
                     </View>
                     <View>
@@ -54,6 +91,7 @@ export default function SingUp({navigation}) {
                             onChangeText={(e) => onChangeInputs(e, 'confirmPassword')}
                             value={confirmPassword}
                             placeholder="Repita la contraseña"
+                            secureTextEntry={true}
                         />
                     </View>
                 </View>
@@ -61,7 +99,7 @@ export default function SingUp({navigation}) {
                 <View style={styles.containerButton}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate('OtherInfo1')}
+                        onPress={onSubmit}
                     >
                         <Text>Guardar</Text>
                     </TouchableOpacity>
@@ -75,7 +113,6 @@ export default function SingUp({navigation}) {
 const styles = StyleSheet.create({
     scrollView: {
         backgroundColor: '#141414',
-
     },
     container: {
         // backgroundColor: '#676767',
