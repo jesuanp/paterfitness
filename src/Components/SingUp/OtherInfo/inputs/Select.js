@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
 
-export default function Select({ width = 'auto', arrayInfo, placeholder }) {
+export default function Select({  onChangeInputs, nameInput, width = 'auto', arrayInfo, placeholder }) {
 
     const [selected, setSelected] = useState(placeholder);
 
@@ -16,14 +16,16 @@ export default function Select({ width = 'auto', arrayInfo, placeholder }) {
     //     pickerRef.current.blur();
     // }
 
+    useEffect(() => {
+        if(selected != placeholder) onChangeInputs(selected, nameInput)
+    }, [selected])
+
     return (
         <TouchableOpacity
             onPress={() => open()}
             style={{...styles.buttonSelect, width: width}}
         >
             <Text >{selected}</Text>
-            {/* Arreglar el Picker */}
-            {/* <View style={{}}> */}
                 <Picker
                     ref={pickerRef}
                     selectedValue={selected}
@@ -37,10 +39,7 @@ export default function Select({ width = 'auto', arrayInfo, placeholder }) {
                             <Picker.Item key={i} label={e} value={e} />
                         ))
                     }
-                    {/* <Picker.Item label="Java" value="java" />
-                    <Picker.Item label="JavaScript" value="JavaScript" /> */}
                 </Picker>
-            {/* </View> */}
         </TouchableOpacity>
     )
 }

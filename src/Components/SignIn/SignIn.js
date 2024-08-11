@@ -1,12 +1,15 @@
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native'
 import AppStructure from '../AppStructure/AppStructure'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import UserContext from '../../context/userContext/UserContext'
 
 // Auth with Firebase
 import { appFirebase, auth } from '../../config/firebase'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
-export default function SignIn({ navigation, setLogin }) {
+export default function SignIn({ props: {navigation}, setLogin }) {
+
+  const { user, signin, findOneUser } = useContext(UserContext)
 
   const [stateInputs, setStateInputs] = useState({
     email: '',
@@ -47,9 +50,11 @@ export default function SignIn({ navigation, setLogin }) {
       Alert.alert('Sesión Iniciada')
 
       auth.onAuthStateChanged(user => {
-        console.log(user)
+        // console.log(user)
         if(user && user.emailVerified){
-          setLogin(user.emailVerified)
+          findOneUser(email)
+          // setLogin(user.emailVerified)
+          navigation.navigate('OtherInfo1')
         }
       })
       
@@ -59,6 +64,7 @@ export default function SignIn({ navigation, setLogin }) {
         Alert.alert('Correo o contraseña incorrectas')
       }
     }
+
   }
 
   return (

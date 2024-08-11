@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import UserContext from '../../context/userContext/UserContext'
 
 // Auth with Firebase
 import { appFirebase, auth } from '../../config/firebase'
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 
 export default function SingUp({navigation}) {
+
+    const { createUser } = useContext(UserContext)
 
     const [stateInputs, setStateInputs] = useState({
         email: '',
@@ -55,6 +58,10 @@ export default function SingUp({navigation}) {
             Alert.alert('Usuario creado, confirma el correo electronico e inicia sesión')
 
             auth.signOut()
+
+            let username = generateUserName(email)
+
+            createUser({email, username})
 
             navigation.navigate('Signin')
           
@@ -108,6 +115,16 @@ export default function SingUp({navigation}) {
             </View>
         </ScrollView>
     )
+}
+
+const generateUserName = (email) => {
+    let username = '';
+    for(let i = 0; i < email.length; i++) {
+        if(email[i] === '@') return username;
+
+        username += email[i];
+    }
+    return username;
 }
 
 const styles = StyleSheet.create({

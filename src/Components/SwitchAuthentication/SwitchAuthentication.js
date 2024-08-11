@@ -18,6 +18,7 @@ export default function SwitchAuthentication() {
 
     const [login, setLogin] = useState(false)
 
+    // HOME
     if(login) {
         return (
           <Stack.Navigator
@@ -43,6 +44,7 @@ export default function SwitchAuthentication() {
         )
     }
 
+    // LOGIN
     return (
         <Stack.Navigator
           screenOptions={{
@@ -69,8 +71,8 @@ export default function SwitchAuthentication() {
 
             <Stack.Screen
                 name='Signin'
-                children={() => (
-                  <SignIn setLogin={setLogin} />
+                children={props => (
+                  <SignIn props={props} setLogin={setLogin} />
                 )}
             />
 

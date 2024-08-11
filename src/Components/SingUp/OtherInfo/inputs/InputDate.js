@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Fontisto'
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-export default function InputDate() {
+export default function InputDate({onChangeInputs}) {
 
     const [date, setDate] = useState(new Date());
 
@@ -24,6 +24,12 @@ export default function InputDate() {
     const showDatepicker = () => {
         showMode('date');
     };
+
+    useEffect(() => {
+      if(date){
+        onChangeInputs(date, 'birth')
+      }
+    }, [date])
 
   return (
     <Icon.Button

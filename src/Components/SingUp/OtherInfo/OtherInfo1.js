@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import React, { useState, useContext } from 'react'
 import InputDate from './inputs/InputDate'
 import Select from './inputs/Select'
 
@@ -12,28 +12,33 @@ import { dailyActivityArray } from './inputs/arrays/dailyActivity'
 import { doesHeDoSportsArray } from './inputs/arrays/doesHeDoSports'
 import { frequencyArray } from './inputs/arrays/frequency'
 
+// context
+import UserContext from '../../../context/userContext/UserContext'
+
 export default function OtherInfo1({ navigation }) {
 
-    // const [stateInputs, setStateInputs] = useState({
-    //     birth: '',
-    //     age: '',
-    //     im: '',
-    //     stature: '',
-    //     weight: '',
-    //     occupation: '',
-    //     dailyActivity: '',
-    //     doesHeDoSports: '',
-    //     frequency: '',
-    // })
+    const { user, createUserData } = useContext(UserContext)
 
-    // const { birth, age, im, stature, weight, occupation, dailyActivity, doesHeDoSports, frequency } = stateInputs
+    const [stateInputs, setStateInputs] = useState({
+        birth: '',
+        age: '',
+        im: '',
+        stature: '',
+        weight: '',
+        occupation: '',
+        daily_activity: '',
+        does_he_do_sports: '',
+        sport_frequency: '',
+    })
 
-    // const onChangeInputs = (e, inputName) => {
-    //     setStateInputs({
-    //         ...stateInputs,
-    //         [inputName]: e
-    //     })
-    // }
+    // const { birth, age, im, stature, weight, occupation, daily_activity, does_he_do_sports, sport_frequency } = stateInputs
+
+    const onChangeInputs = (e, inputName) => {
+        setStateInputs({
+            ...stateInputs,
+            [inputName]: e
+        })
+    }
 
     // const onChangeInputsNumber = (e, inputName) => {
     //     setStateInputs({
@@ -42,6 +47,15 @@ export default function OtherInfo1({ navigation }) {
     //     })
     // }
 
+    const handleSubmit = () => {
+        // This for checks that there are no empty fields in the object
+        for (const property in stateInputs) {
+            if(!stateInputs[property] || stateInputs[property] == '') return Alert.alert('Hay campos vacios')
+        }
+        console.log(user)
+        createUserData({...stateInputs, userId: user.id, gender: stateInputs.im,})
+        navigation.navigate('OtherInfo2')
+    }
 
     return (
         <ScrollView style={styles.scrollView} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
@@ -50,30 +64,30 @@ export default function OtherInfo1({ navigation }) {
                 <View style={styles.form}>
 
                     <View style={styles.infoInRow}>
-                        <InputDate />
-                        <Select width={60} arrayInfo={ages} placeholder={'Edad'} />
-                        <Select width={98} arrayInfo={['Hombre', 'Mujer']} placeholder={'Soy'} />
+                        <InputDate onChangeInputs={onChangeInputs} />
+                        <Select onChangeInputs={onChangeInputs} nameInput={'age'} width={60} arrayInfo={ages} placeholder={'Edad'} />
+                        <Select onChangeInputs={onChangeInputs} nameInput={'im'} width={98} arrayInfo={['Hombre', 'Mujer']} placeholder={'Soy'} />
                     </View>
 
                     <View style={styles.infoInRow}>
-                        <Select width={147} arrayInfo={statureArray} placeholder={'Estatura'} />
-                        <Select width={147} arrayInfo={weightArray} placeholder={'Peso'} />
+                        <Select onChangeInputs={onChangeInputs} nameInput={'stature'} width={147} arrayInfo={statureArray} placeholder={'Estatura'} />
+                        <Select onChangeInputs={onChangeInputs} nameInput={'weight'} width={147} arrayInfo={weightArray} placeholder={'Peso'} />
                     </View>
 
-                    <Select width={'auto'} arrayInfo={occupationArray} placeholder={'Ocupación'} />
+                    <Select onChangeInputs={onChangeInputs} nameInput={'occupation'} width={'auto'} arrayInfo={occupationArray} placeholder={'Ocupación'} />
                     
-                    <Select width={'auto'} arrayInfo={dailyActivityArray} placeholder={'¿Qué tan activo suele ser tu día?'} />
+                    <Select onChangeInputs={onChangeInputs} nameInput={'daily_activity'} width={'auto'} arrayInfo={dailyActivityArray} placeholder={'¿Qué tan activo suele ser tu día?'} />
                     
-                    <Select width={'auto'} arrayInfo={doesHeDoSportsArray} placeholder={'¿Practica alguna actividad deportiva?'} />
+                    <Select onChangeInputs={onChangeInputs} nameInput={'does_he_do_sports'} width={'auto'} arrayInfo={doesHeDoSportsArray} placeholder={'¿Practica alguna actividad deportiva?'} />
                     
-                    <Select width={'auto'} arrayInfo={frequencyArray} placeholder={'Indique la frecuencia'} />
+                    <Select onChangeInputs={onChangeInputs} nameInput={'sport_frequency'} width={'auto'} arrayInfo={frequencyArray} placeholder={'Indique la frecuencia'} />
 
                 </View>
 
                 <View style={styles.containerButton}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate('OtherInfo2')}
+                        onPress={handleSubmit}
                     >
                         <Text>Guardar</Text>
                     </TouchableOpacity>
